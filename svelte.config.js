@@ -7,11 +7,12 @@ import nodeAdapter from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/kit/vite';
 
 let selectedAdapter;
+const isVercel = process.env.DEPLOY_TARGET === 'VERCEL' || process.env.VERCEL === '1';
 
 if (process.env.DEPLOY_TARGET === 'NETLIFY') {
   selectedAdapter = netlifyAdapter();
-} else if (process.env.DEPLOY_TARGET === 'VERCEL') {
-  selectedAdapter = vercelAdapter();
+} else if (isVercel) {
+  selectedAdapter = vercelAdapter({ runtime: 'edge' });
 } else if (process.env.DEPLOY_TARGET === 'NODE') {
   selectedAdapter = nodeAdapter();
 } else if (process.env.DEPLOY_TARGET === 'STATIC') {
